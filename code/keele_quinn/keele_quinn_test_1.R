@@ -32,8 +32,8 @@ mod0 <- stan_model('keele_quinn_2.stan')
 #   b and c priors are beta(b_i, c_i) for psi
 dl <- list('n'=c(164,163,3,18), 
            'a'=rep(0.25, 4), 
-           'b'=rep(0.5, 4), 
-           'c'=rep(0.5, 4))
+           'b'=rep(1.0, 4), 
+           'c'=rep(1.0, 4))
 
 pos <- sampling(mod0, dl, chains=3, iter=2e3, seed=42)
 
@@ -42,7 +42,16 @@ print(pos, pars=c('ATE_s', 'ATE_lo', 'ATE_hi'), digits=3)
 #   under "uniform" priors
 #   0.023 [-0.342, 0.387]
 #   but I get
-#   0.023 [-0.042, 0.088]
+#   0.023 [-0.042, 0.084]
+
+#   check the psi
+print(pos, pars='psi')
+#   they are different from the prior
+#   but SimpleTable just returns the prior
+
+
+#stan_dens(pos, pars='psi')
+
 
 
 #   SCRIPT END
